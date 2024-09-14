@@ -1,0 +1,54 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class ZeroSumSubarrays {
+
+    public static List<int[]> findZeroSumSubarrays(int[] arr) {
+        
+        List<int[]> result = new ArrayList<>();
+
+       
+        HashMap<Integer, List<Integer>> sumMap = new HashMap<>();
+
+       
+        int cumulativeSum = 0;
+
+       
+        sumMap.put(0, new ArrayList<>());
+        sumMap.get(0).add(-1);  
+
+        // Traverse through the array
+        for (int i = 0; i < arr.length; i++) {
+            // Update the cumulative sum
+            cumulativeSum += arr[i];
+
+          
+            if (sumMap.containsKey(cumulativeSum)) {
+                
+                List<Integer> startIndices = sumMap.get(cumulativeSum);
+
+                // For each starting index, a subarray is found between (startIndex + 1) and i
+                for (int start : startIndices) {
+                    result.add(new int[]{start + 1, i});
+                }
+            }
+
+           
+            sumMap.putIfAbsent(cumulativeSum, new ArrayList<>());
+            sumMap.get(cumulativeSum).add(i);
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, -3, 3, -1, 2};
+        List<int[]> result = findZeroSumSubarrays(arr);
+
+       
+        for (int[] subarray : result) {
+            System.out.println("Subarray found from Index " + subarray[0] + " to " + subarray[1]);
+        }
+    }
+}
